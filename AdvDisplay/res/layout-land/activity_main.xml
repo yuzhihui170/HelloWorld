@@ -1,0 +1,126 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:baselineAligned="true"
+        android:orientation="horizontal" >
+
+        <ViewFlipper
+            android:id="@+id/viewflipper"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_green_light" />
+
+        <SurfaceView
+            android:id="@+id/surfaceView1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@android:color/holo_blue_light" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="5dp"
+        android:layout_weight="3"
+        android:baselineAligned="true"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout_weather"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@drawable/tianqi"
+            android:gravity="center_vertical" >
+
+            <TextView
+                android:id="@+id/textView_city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/weather_text_marginBottom"
+                android:layout_marginTop="20dp"
+                android:text="城市:  深圳"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/weather_text_size" />
+
+            <TextView
+                android:id="@+id/textView_weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView_city"
+                android:layout_marginBottom="@dimen/weather_text_marginBottom"
+                android:text="天气:  "
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/weather_text_size" />
+
+            <TextView
+                android:id="@+id/textView_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView_weather"
+                android:text="温度:  "
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/weather_text_size" />
+
+            <AnalogClock
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_alignParentRight="true"
+                android:dial="@drawable/clockgoog_dial"
+                android:hand_hour="@drawable/gdehour"
+                android:hand_minute="@drawable/gdeminute"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_green_light" />
+
+        <WebView
+            android:id="@+id/webView1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:focusable="false" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:baselineAligned="true"
+        android:orientation="horizontal" >
+
+        <com.yzh.ui.FlowTextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="@string/hello_world" />
+    </LinearLayout>
+
+</LinearLayout>
