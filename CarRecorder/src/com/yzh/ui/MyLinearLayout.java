@@ -1,45 +1,35 @@
-package com.forrest.carrecorder;
+package com.yzh.ui;
 
 import com.yzh.logUtils.YLog;
 
 import android.content.Context;
-import android.media.MediaRecorder;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
-public class RecorderSurfaceView extends SurfaceView {
+public class MyLinearLayout extends LinearLayout{
 	private float mTouchStartX;
 	private float mTouchStartY;
 	private float x;
 	private float y;
 	private WindowManager wm;
 	private WindowManager.LayoutParams wmParams;
-	private LinearLayout mLinearLayout;	
 
-	public RecorderSurfaceView(Context context) {
+	public MyLinearLayout(Context context) {
 		super(context);
 	}
-
-	public RecorderSurfaceView(Context context, AttributeSet attrs) {
+	
+	public MyLinearLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		wm = (WindowManager) getContext().getApplicationContext().getSystemService("window");
 		wmParams = new WindowManager.LayoutParams();
-		wmParams.type = WindowManager.LayoutParams.TYPE_PHONE;
 	}
 	
-	public void setLayout(LinearLayout linearLayout) {
-		this.mLinearLayout = linearLayout;
-	}
-
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		// 获取相对屏幕的坐标，即以屏幕左上角为原点
-		x = event.getRawX()+860;
+		x = event.getRawX();
 		y = event.getRawY() - 25; // 25是系统状态栏的高度
 		YLog.i("currX " + x + "  = currY " + y);
 		switch (event.getAction()) {
@@ -65,7 +55,7 @@ public class RecorderSurfaceView extends SurfaceView {
 		// 更新浮动窗口位置参数
 		wmParams.x = (int) (x - mTouchStartX);
 		wmParams.y = (int) (y - mTouchStartY);
-		wm.updateViewLayout(mLinearLayout, wmParams); // 刷新显示
+		wm.updateViewLayout(this, wmParams); // 刷新显示
 	}
 
 }

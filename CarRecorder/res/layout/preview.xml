@@ -5,16 +5,16 @@
     android:background="@android:color/white"
     android:orientation="vertical" >
 
-    <com.forrest.carrecorder.RecorderSurfaceView
+    <SurfaceView
         android:id="@+id/surfaceView"
         android:layout_width="match_parent"
-        android:layout_height="0dp" 
-        android:layout_weight="1"/>
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-         android:layout_weight="0"
+        android:layout_weight="0"
         android:orientation="horizontal" >
 
         <Button
