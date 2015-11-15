@@ -4,13 +4,17 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.yzh.Utils.DataUtil;
+import com.yzh.Utils.YLog;
 import com.yzh.ui.MoveImageView;
 import com.yzh.ui.MyLinearLayout;
 
 import android.app.ActionBar.LayoutParams;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
@@ -31,7 +35,10 @@ import android.widget.LinearLayout;
 
 public class RecorderService extends Service implements SurfaceHolder.Callback{
 	public static final String TAG = "yzh";
+	public static final String ACTION_NAME = "com.forrest.carrecorder.RecorderService";
+	private CarRecorderApplication mCarRecorderApplication;
 	private WindowManager mWindowManager;
+	private WindowManager.LayoutParams mSurfaceLayoutParams;
 	private WindowManager.LayoutParams mLayoutParams;
 	private LinearLayout mLinearLayout;
 	private SurfaceView mSurfaceView; //预览窗口/ 
@@ -43,7 +50,9 @@ public class RecorderService extends Service implements SurfaceHolder.Callback{
 	private String mSaveFileName;
 	private int num = 1;
 	
-	private final Timer timer = new Timer(); 
+	private final Timer timer = new Timer();
+	
+	private boolean display = true;
 	
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -52,18 +61,22 @@ public class RecorderService extends Service implements SurfaceHolder.Callback{
 	
 	@Override
 	public void onCreate() {
+		mCarRecorderApplication = (CarRecorderApplication) getApplication();
 		mWindowManager = (WindowManager) getApplication().getSystemService(Context.WINDOW_SERVICE);
+		mSurfaceLayoutParams = new WindowManager.LayoutParams();
 		mLayoutParams = new WindowManager.LayoutParams();
-		mLayoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
-		mLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-		mLayoutParams.gravity = Gravity.RIGHT | Gravity.TOP;
-		mLayoutParams.width = 640;//WindowManager.LayoutParams.WRAP_CONTENT;
-		mLayoutParams.height =480;//WindowManager.LayoutParams.WRAP_CONTENT;
+		mSurfaceLayoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
+		mSurfaceLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+		mSurfaceLayoutParams.gravity = Gravity.RIGHT | Gravity.TOP;
+		mSurfaceLayoutParams.x = 0;
+		mSurfaceLayoutParams.y = 140;
+		mSurfaceLayoutParams.width = 800;
+		mSurfaceLayoutParams.height =600;
 		mLinearLayout = (LinearLayout)LayoutInflater.from(this).inflate(R.layout.preview, null);
 		
-		mSaveFileName = Constant.SAVE_DIRECTORY + "/recorder_" + num + ".3gp"; // /mnt/sdcard/CarRecorder/recorder_1.3gp
+		mSaveFileName = Constant.SAVE_DIRECTORY + "/video_" + DataUtil.getTime() + ".3gp"; // /mnt/sdcard/CarRecorder/recorder_1.3gp
 		
-//		mSurfaceView = (SurfaceView)mLinearLayout.findViewById(R.id.surfaceView);
+		mSurfaceView = (SurfaceView)mLinearLayout.findViewById(R.id.surfaceView);
 		mSurfaceView = (SurfaceView)mLinearLayout.findViewById(R.id.surfaceView);
 		mBtnChangeWindow = (Button)mLinearLayout.findViewById(R.id.btn_changeWindow);
 		mBtnStopService = (Button)mLinearLayout.findViewById(R.id.btn_stop);
@@ -71,24 +84,28 @@ public class RecorderService extends Service implements SurfaceHolder.Callback{
 		mSurfaceHolder = mSurfaceView.getHolder();
 		mSurfaceHolder.addCallback(this); //添加回调接口
 		
-//		mWindowManager.addView(mLinearLayout, mLayoutParams); //在悬浮窗中显示预览
+		mWindowManager.addView(mLinearLayout, mSurfaceLayoutParams); //在悬浮窗中显示预览
 		
 		mImageView = new MoveImageView(this);
-		mImageView.setImageResource(R.drawable.ic_launcher);
+		mImageView.setImageResource(R.drawable.record);
 		mLayoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
 		mLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-//		mLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
+		mLayoutParams.gravity = Gravity.LEFT | Gravity.TOP;
 		mLayoutParams.x = 960;
-		mLayoutParams.y = 30;
+		mLayoutParams.y = 25;
 		mLayoutParams.width = 100;
 		mLayoutParams.height = 100;
 		mLayoutParams.format= PixelFormat.RGBA_8888;
+		mCarRecorderApplication.setLayoutParams(mLayoutParams);
 		mWindowManager.addView(mImageView, mLayoutParams); //在悬浮窗中显示预览
 		
 		setViewListener(); //设置监听器
 		
-		timer.schedule(myTimeTask, 1*60*1000, 1*60*1000);
+		registerBoradcastReceiver();
+		
+		timer.schedule(myTimeTask, 10*60*1000, 10*60*1000);
 		Log.d(TAG,"[RecorderService] ------- onCreate -------");
+//		YLog.d("data : " + DataUtil.getTime());
 	}
 	
 	@Override
@@ -100,27 +117,38 @@ public class RecorderService extends Service implements SurfaceHolder.Callback{
 	public void onDestroy() {
 		super.onDestroy();
 		timer.cancel();
-		//mWindowManager.removeView(mLinearLayout);
+		mWindowManager.removeView(mLinearLayout);
 		mWindowManager.removeView(mImageView);
+		unregisterReceiver(mBroadcastReceiver);
 		Log.d(TAG,"[RecorderService]  ------- onDestroy ------- ");
 	}
 	
 	boolean flag = true;
-	public void changeWindow() {
-		if(mLayoutParams != null && mWindowManager != null && mLinearLayout != null && flag) {
-			mLayoutParams.width = 640;
-			mLayoutParams.height =480;
-			mWindowManager.updateViewLayout(mLinearLayout, mLayoutParams); //更新参数
-//			ViewGroup.LayoutParams lp =   mSurfaceView.getLayoutParams();
-//			lp.width = 960;
-//			lp.height = 540;
-//			mSurfaceView.setLayoutParams(lp);
-			flag = false;
-		}else {
-			mLayoutParams.width = 800;
-			mLayoutParams.height =600;
-			mWindowManager.updateViewLayout(mLinearLayout, mLayoutParams); //更新参数
-			flag = true;
+	public void changeWindow(boolean display) {
+		if(mLayoutParams != null && mWindowManager != null && mLinearLayout != null) {
+			if(display) {
+				mSurfaceLayoutParams.gravity = Gravity.RIGHT | Gravity.TOP;
+				mSurfaceLayoutParams.x = 0;
+				mSurfaceLayoutParams.y = 140;
+				mSurfaceLayoutParams.width = 800;
+				mSurfaceLayoutParams.height =600;
+				mWindowManager.updateViewLayout(mLinearLayout, mSurfaceLayoutParams); //更新参数
+				
+				mLayoutParams.x = 960;
+				mLayoutParams.y = 25;
+				mWindowManager.updateViewLayout(mImageView, mLayoutParams); //更新参数
+			}else {
+				mSurfaceLayoutParams.gravity = Gravity.RIGHT | Gravity.TOP;
+				mSurfaceLayoutParams.x = 0;
+				mSurfaceLayoutParams.y = 700;
+				mSurfaceLayoutParams.width = 50;
+				mSurfaceLayoutParams.height =50;
+				mWindowManager.updateViewLayout(mLinearLayout, mSurfaceLayoutParams); //更新参数
+				
+				mLayoutParams.x = 540;
+				mLayoutParams.y = 25;
+				mWindowManager.updateViewLayout(mImageView, mLayoutParams); //更新参数
+			}
 		}
 	}
 	
@@ -130,7 +158,7 @@ public class RecorderService extends Service implements SurfaceHolder.Callback{
 			mBtnChangeWindow.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					changeWindow();
+					changeWindow(true);
 					Log.d(TAG,"mBtnChangeWindow --");
 				}
 			});
@@ -192,7 +220,6 @@ public class RecorderService extends Service implements SurfaceHolder.Callback{
 		} 
 	}
 	
-	
 	public void startRecording(SurfaceView surfaceView) {
 		mMediaRecorder = new MediaRecorder();// 创建mediarecorder对象
 		// 设置录制视频源为Camera(相机)
@@ -236,9 +263,29 @@ public class RecorderService extends Service implements SurfaceHolder.Callback{
 		public void run() {
 			stopRecording(); 
 			num++;
-			mSaveFileName = Constant.SAVE_DIRECTORY + "/recorder_" + num + ".3gp";
+			mSaveFileName = Constant.SAVE_DIRECTORY + "/video" + DataUtil.getTime() + ".3gp";
 			startRecording(mSurfaceView);
 		}
 	};
+	
+	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver(){  
+        @Override  
+        public void onReceive(Context context, Intent intent) {  
+            String action = intent.getAction();
+            
+            if(action.equals(ACTION_NAME)){
+            	display = intent.getBooleanExtra("display", true);
+            	changeWindow(display);
+            	YLog.d("receiver BroadcastReceiver");
+            }  
+        } 
+	};
+	
+	private void registerBoradcastReceiver(){  
+        IntentFilter myIntentFilter = new IntentFilter();  
+        myIntentFilter.addAction(ACTION_NAME);  
+        //注册广播        
+        registerReceiver(mBroadcastReceiver, myIntentFilter);  
+    }  
 
 }

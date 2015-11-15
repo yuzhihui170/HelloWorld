@@ -1,39 +1,33 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:background="@drawable/background1"
     tools:context="${relativePackage}.${activityClass}" >
 
-    <!-- 
-    <LinearLayout
+    <TextView
+        android:id="@+id/textView_notice"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:lines="2"
+        android:text="提示:如果录像图标没有正常在界面上显示，请重启开启本程序！"
+        android:textColor="@android:color/holo_red_dark" />
+
+    <Button
+        android:id="@+id/btn_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:layout_below="@+id/textView_notice"
+        android:text="后台录像" />
 
-        <com.forrest.carrecorder.RecorderSurfaceView
-            android:id="@+id/surfaceView1"
-            android:layout_width="400dp"
-            android:layout_height="300dp" />
-    </LinearLayout>  -->
-
-    <LinearLayout
+    <Button
+        android:id="@+id/btn_topService"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:orientation="vertical" >
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:text="停止录像" />
 
-        <Button
-            android:id="@+id/btn_test"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="test" />
-
-        <Button
-            android:id="@+id/btn_topService"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="topService" />
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

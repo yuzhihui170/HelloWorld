@@ -16,17 +16,19 @@ import android.widget.Button;
 
 public class MainActivity extends Activity {
 	public static final String TAG = "yzh";
+	private CarRecorderApplication mCarRecorderApplication;
 	private Camera mCamera;
 	private Camera.Parameters mParam;
 	private RecorderSurfaceView mRecorderSurfaceView; 
-	private Button mBtn_test;        //连续保存测试
+	private Button mBtnBack;        //后台录像
 	private Button mBtn_stopService; //停止后台录像服务
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		mCarRecorderApplication = (CarRecorderApplication) getApplication();
 //		mRecorderSurfaceView = (RecorderSurfaceView)findViewById(R.id.surfaceView1);
-		mBtn_test = (Button)findViewById(R.id.btn_test);
+		mBtnBack = (Button)findViewById(R.id.btn_back);
 		mBtn_stopService = (Button) findViewById(R.id.btn_topService);
 		setViewListener();
 //		getCameraInfo();
@@ -37,6 +39,10 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		mCarRecorderApplication.setMainActivityDisplay(true);
+		Intent mIntent = new Intent(RecorderService.ACTION_NAME);
+		mIntent.putExtra("display", true);
+		sendBroadcast(mIntent);
 //		if(mRecorderSurfaceView != null) {
 //			mRecorderSurfaceView.setKeepScreenOn(true); //设置屏幕长亮
 //		}
@@ -47,19 +53,24 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		Intent mIntent = new Intent(RecorderService.ACTION_NAME);
+		mIntent.putExtra("display", false);
+		sendBroadcast(mIntent);
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		mCarRecorderApplication.setMainActivityDisplay(false);
 	}
 	
 	private void setViewListener() {
-		mBtn_test.setOnClickListener(new View.OnClickListener() {
+		mBtnBack.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//				mRecorderSurfaceView.stopRecording();
-//				mRecorderSurfaceView.startRecording(mRecorderSurfaceView);
-//				Log.d(TAG,"mBtn_test onClick");
+				finish();
 			}
 		});
-		
-		
 		
 		mBtn_stopService.setOnClickListener(new View.OnClickListener() {
 			@Override
