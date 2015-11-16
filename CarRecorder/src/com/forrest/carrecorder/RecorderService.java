@@ -5,6 +5,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.yzh.Utils.DataUtil;
+import com.yzh.Utils.MemoryUtil;
 import com.yzh.Utils.YLog;
 import com.yzh.ui.MoveImageView;
 import com.yzh.ui.MyLinearLayout;
@@ -18,6 +19,7 @@ import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.Gravity;
@@ -32,6 +34,7 @@ import android.webkit.WebView.FindListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class RecorderService extends Service implements SurfaceHolder.Callback{
 	public static final String TAG = "yzh";
@@ -40,12 +43,15 @@ public class RecorderService extends Service implements SurfaceHolder.Callback{
 	private WindowManager mWindowManager;
 	private WindowManager.LayoutParams mSurfaceLayoutParams;
 	private WindowManager.LayoutParams mLayoutParams;
+	
 	private LinearLayout mLinearLayout;
 	private SurfaceView mSurfaceView; //预览窗口/ 
 	private SurfaceHolder mSurfaceHolder;
 	private MoveImageView mImageView;
 	private Button mBtnChangeWindow;
 	private Button mBtnStopService;
+	private TextView mTextViewTime;
+	
 	private MediaRecorder mMediaRecorder; //录像的对象
 	private String mSaveFileName;
 	private int num = 1;
@@ -78,6 +84,7 @@ public class RecorderService extends Service implements SurfaceHolder.Callback{
 		
 		mSurfaceView = (SurfaceView)mLinearLayout.findViewById(R.id.surfaceView);
 		mSurfaceView = (SurfaceView)mLinearLayout.findViewById(R.id.surfaceView);
+		mTextViewTime = (TextView) mLinearLayout.findViewById(R.id.textview_time);
 		mBtnChangeWindow = (Button)mLinearLayout.findViewById(R.id.btn_changeWindow);
 		mBtnStopService = (Button)mLinearLayout.findViewById(R.id.btn_stop);
 		
@@ -93,8 +100,8 @@ public class RecorderService extends Service implements SurfaceHolder.Callback{
 		mLayoutParams.gravity = Gravity.LEFT | Gravity.TOP;
 		mLayoutParams.x = 960;
 		mLayoutParams.y = 25;
-		mLayoutParams.width = 100;
-		mLayoutParams.height = 100;
+		mLayoutParams.width = 200;
+		mLayoutParams.height = 200;
 		mLayoutParams.format= PixelFormat.RGBA_8888;
 		mCarRecorderApplication.setLayoutParams(mLayoutParams);
 		mWindowManager.addView(mImageView, mLayoutParams); //在悬浮窗中显示预览
@@ -105,6 +112,9 @@ public class RecorderService extends Service implements SurfaceHolder.Callback{
 		
 		timer.schedule(myTimeTask, 10*60*1000, 10*60*1000);
 		Log.d(TAG,"[RecorderService] ------- onCreate -------");
+		
+		MemoryUtil mMemoryUtil = new MemoryUtil(this);
+		mMemoryUtil.getMemoryInfo();
 //		YLog.d("data : " + DataUtil.getTime());
 	}
 	
@@ -215,6 +225,7 @@ public class RecorderService extends Service implements SurfaceHolder.Callback{
 			mMediaRecorder.prepare();
 			// 开始录制
 			mMediaRecorder.start();
+			mHandler.post(mRunnable);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
@@ -254,6 +265,7 @@ public class RecorderService extends Service implements SurfaceHolder.Callback{
 			mMediaRecorder.stop();
 			mMediaRecorder.release();
 			mMediaRecorder = null;
+			time = 0;
 		}
 	}
 	
@@ -287,5 +299,16 @@ public class RecorderService extends Service implements SurfaceHolder.Callback{
         //注册广播        
         registerReceiver(mBroadcastReceiver, myIntentFilter);  
     }  
+	
+	private Handler mHandler = new Handler();
+	private int time = 0;
+	private Runnable mRunnable = new Runnable() {
+		@Override
+		public void run() {
+			mTextViewTime.setText(DataUtil.formatTime(time, false));
+			time = time + 1000;
+			mHandler.postDelayed(mRunnable, 1000);
+		}
+	};
 
 }
