@@ -110,7 +110,8 @@ public class RecorderService extends Service implements SurfaceHolder.Callback{
 		
 		registerBoradcastReceiver();
 		
-		timer.schedule(myTimeTask, 10*60*1000, 10*60*1000);
+//		timer.schedule(myTimeTask, 10*60*1000, 10*60*1000); TIME_SPAN
+		timer.schedule(myTimeTask, Constant.TIME_SPAN*60*1000, Constant.TIME_SPAN*60*1000);
 		Log.d(TAG,"[RecorderService] ------- onCreate -------");
 		
 		MemoryUtil mMemoryUtil = new MemoryUtil(this);

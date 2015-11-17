@@ -2,12 +2,15 @@ package com.yzh.Utils;
 
 import java.io.File;
 
+import com.forrest.carrecorder.Constant;
+
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Environment;
 import android.os.StatFs;
 import android.text.format.Formatter;
+import android.util.Log;
 
 public class MemoryUtil {
 	private Context mContext;
@@ -29,56 +32,58 @@ public class MemoryUtil {
 		return leftMemSize;
 	}
 	
-	/**
-	 * 获得SD卡总大小
-	 * 
-	 * @return
-	 */
-	private String getSDTotalSize() {
+	/** 获得SD卡总大小 */
+	public String getSDTotalSize() {
 		File path = Environment.getExternalStorageDirectory();
-		StatFs stat = new StatFs(path.getPath());
-		long blockSize = stat.getBlockSize();
-		long totalBlocks = stat.getBlockCount();
-		return Formatter.formatFileSize(mContext, blockSize * totalBlocks);
-	}
-
-	/**
-	 * 获得sd卡剩余容量，即可用大小
-	 * 
-	 * @return
-	 */
-	private String getSDAvailableSize() {
-		File path = Environment.getExternalStorageDirectory();
-		StatFs stat = new StatFs(path.getPath());
-		long blockSize = stat.getBlockSize();
-		long availableBlocks = stat.getAvailableBlocks();
-		return Formatter.formatFileSize(mContext, blockSize * availableBlocks);
-	}
-
-	/**
-	 * 获得机身内存总大小
-	 * 
-	 * @return
-	 */
-	private String getRomTotalSize() {
-		File path = Environment.getDataDirectory();
+		Log.d("mem","pathSD = " + path.getAbsolutePath());
 		StatFs stat = new StatFs(path.getPath());
 		long blockSize = stat.getBlockSizeLong();
 		long totalBlocks = stat.getBlockCountLong();
 		return Formatter.formatFileSize(mContext, blockSize * totalBlocks);
 	}
 
-	/**
-	 * 获得机身可用内存
-	 * 
-	 * @return
-	 */
-	private String getRomAvailableSize() {
-		File path = Environment.getDataDirectory();
+	/** 获得sd卡剩余容量，即可用大小 */
+	public String getSDAvailableSize() {
+		File path = Environment.getExternalStorageDirectory();
 		StatFs stat = new StatFs(path.getPath());
-		long blockSize = stat.getBlockSize();
-		long availableBlocks = stat.getAvailableBlocks();
+		long blockSize = stat.getBlockSizeLong();
+		long availableBlocks = stat.getAvailableBlocksLong();
 		return Formatter.formatFileSize(mContext, blockSize * availableBlocks);
 	}
+
+	/** 获得机身内存总大小 */
+	public String getRomTotalSize() {
+		File path = Environment.getDataDirectory();
+		Log.d("mem","pathIn = " + path.getAbsolutePath());
+		StatFs stat = new StatFs(path.getPath());
+		long blockSize = stat.getBlockSizeLong();
+		long totalBlocks = stat.getBlockCountLong();
+		return Formatter.formatFileSize(mContext, blockSize * totalBlocks);
+	}
+
+	/** 获得机身可用内存  */
+	public String getRomAvailableSize() {
+		File path = Environment.getDataDirectory();
+		StatFs stat = new StatFs(path.getPath());
+		long blockSize = stat.getBlockSizeLong();
+		long availableBlocks = stat.getAvailableBlocksLong();
+		return Formatter.formatFileSize(mContext, blockSize * availableBlocks);
+	}
+	
+	/** 获得机身可用内存  */
+	public Long getRomAvailableSizeLong() {
+		File path = Environment.getDataDirectory();
+		StatFs stat = new StatFs(path.getPath());
+		long blockSize = stat.getBlockSizeLong();
+		long availableBlocks = stat.getAvailableBlocksLong();
+		return blockSize * availableBlocks;
+	}
+	
+	/**空间不足时删除文件*/
+//	public void fileDelete() {
+//		if(getRomAvailableSizeLong()< Constant.FREE_SPACE) {
+//			Constant.SAVE_DIRECTORY
+//		}
+//	}
 
 }

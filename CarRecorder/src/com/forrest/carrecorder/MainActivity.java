@@ -5,6 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import com.yzh.Utils.MemoryUtil;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.hardware.Camera;
@@ -48,6 +51,10 @@ public class MainActivity extends Activity {
 //		}
 //		String timeStamp = new SimpleDateFormat("yyyy_MM_dd", Locale.CHINA).format(new Date());
 //		Log.d(TAG,"timeStamp = " + timeStamp);
+		MemoryUtil memoryUtil = new MemoryUtil(this);
+		Log.d("mem"," build-in = " + memoryUtil.getRomTotalSize() + "--" + memoryUtil.getRomAvailableSize() + "--" + memoryUtil.getRomAvailableSizeLong());
+		Log.d("mem"," SD = " + memoryUtil.getSDTotalSize() + "--" + memoryUtil.getSDAvailableSize());
+		
 	}
 	
 	@Override
