@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <ListPreference
+        android:defaultValue="0"
+        android:dialogTitle="曝光值"
+        android:entries="@array/exposure_entries"
+        android:entryValues="@array/exposure_entries_value"
+        android:key="exposure"
+        android:summary="设置拍照曝光值: 0"
+        android:title="曝光值" >
+    </ListPreference>
+    <ListPreference
+        android:defaultValue="200"
+        android:dialogTitle="感光度"
+        android:entries="@array/iso_entries"
+        android:entryValues="@array/iso_entries_value"
+        android:key="iso"
+        android:summary="设置感光度值: 200"
+        android:title="感光度" >
+    </ListPreference>
+    <ListPreference
+        android:defaultValue="incandescent"
+        android:dialogTitle="白平衡"
+        android:entries="@array/whitebalance_entries"
+        android:entryValues="@array/whitebalance_entries_value"
+        android:key="awb"
+        android:summary="设置白平衡: 白织光"
+        android:title="白平衡" >
+    </ListPreference>
+    <ListPreference
+        android:defaultValue="4096x2304"
+        android:dialogTitle="照片大小"
+        android:entries="@array/picturesize_entries"
+        android:entryValues="@array/picturesize_entries_value"
+        android:key="pictureSize"
+        android:summary="设置照片大小: 4096x2304"
+        android:title="照片大小" >
+    </ListPreference>
+    <ListPreference
+        android:defaultValue="100"
+        android:dialogTitle="拍照次数"
+        android:entries="@array/picturenum_entries"
+        android:entryValues="@array/picturenum_entries_value"
+        android:key="pictureNum"
+        android:summary="设置拍照次数: 100"
+        android:title="拍照次数" >
+    </ListPreference>
+    <ListPreference
+        android:defaultValue="@array/list_entries_value2"
+        android:dialogTitle="dialogTitle"
+        android:entries="@array/list_entries"
+        android:entryValues="@array/list_entries_value"
+        android:key="myListPreference3"
+        android:summary="说明摘要yy"
+        android:title="标题" >
+    </ListPreference>
+    <ListPreference
+        android:defaultValue="@array/list_entries_value2"
+        android:dialogTitle="dialogTitle"
+        android:entries="@array/list_entries"
+        android:entryValues="@array/list_entries_value"
+        android:key="myListPreference"
+        android:summary="说明摘要yy"
+        android:title="标题" >
+    </ListPreference>
+    <ListPreference
+        android:defaultValue="@array/list_entries_value2"
+        android:dialogTitle="dialogTitle"
+        android:entries="@array/list_entries"
+        android:entryValues="@array/list_entries_value"
+        android:key="myListPreference2"
+        android:summary="说明摘要yy"
+        android:title="标题" >
+    </ListPreference>
+    <ListPreference
+        android:defaultValue="@array/list_entries_value2"
+        android:dialogTitle="dialogTitle"
+        android:entries="@array/list_entries"
+        android:entryValues="@array/list_entries_value"
+        android:key="myListPreference3"
+        android:summary="说明摘要yy"
+        android:title="标题" >
+    </ListPreference>
+
+</PreferenceScreen>

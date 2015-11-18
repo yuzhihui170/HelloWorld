@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="list_entries">
+        <item>山东</item>
+        <item>福建</item>
+        <item>北京</item>
+        <item>河北</item>
+    </string-array>
+    <string-array name="list_entries_value">
+        <item>shandong1</item>
+        <item>fujian1</item>
+        <item>beijing1</item>
+        <item>hebei1</item>
+    </string-array>
+    <string-array name="list_entries_value2">
+        <item>shandong2</item>
+        <item>fujian2</item>
+        <item>beijing2</item>
+        <item>hebei2</item>
+    </string-array>
+    <!-- 曝光值 -->
+    <string-array name="exposure_entries" translatable="false">
+        <item>-4</item>
+        <item>-3</item>
+        <item>-2</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+        <item>+4</item>
+    </string-array>
+    <string-array name="exposure_entries_value" translatable="false">
+        <item>-4</item>
+        <item>-3</item>
+        <item>-2</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+    <!-- 感光值 -->
+    <string-array name="iso_entries" translatable="false">
+        <item>auto</item>
+        <item>100</item>
+        <item>200</item>
+        <item>400</item>
+        <item>800</item>
+        <item>1600</item>
+    </string-array>
+    <string-array name="iso_entries_value" translatable="false">
+        <item>auto</item>
+        <item>100</item>
+        <item>200</item>
+        <item>400</item>
+        <item>800</item>
+        <item>1600</item>
+    </string-array>
+    <!-- 白平衡 -->
+    <string-array name="whitebalance_entries" translatable="false">
+        <item>自动</item>
+        <item>白织光</item>
+        <item>日光</item>
+        <item>荧光</item>
+        <item>阴天</item>
+        <item>微光</item>
+        <item>阴影</item>
+        <item>暖荧光</item>
+    </string-array>
+    <string-array name="whitebalance_entries_value" translatable="false">
+        <item>auto</item>
+        <item>incandescent</item>
+        <item>daylight</item>
+        <item>fluorescent</item>
+        <item>cloudy-daylight</item>
+        <item>twilight</item>
+        <item>shade</item>
+        <item>warm-fluorescent</item>
+    </string-array>
+
+    <!-- 照片大小 -->
+    <string-array name="picturesize_entries" translatable="false">
+        <item>1024x768</item>
+        <item>1280x960</item>
+        <item>1600x1200</item>
+        <item>2048x1536</item>
+        <item>2560x1920</item>
+        <item>4096x2304</item>
+    </string-array>
+    <string-array name="picturesize_entries_value" translatable="false">
+        <item>1024x768</item>
+        <item>1280x960</item>
+        <item>1600x1200</item>
+        <item>2048x1536</item>
+        <item>2560x1920</item>
+        <item>4096x2304</item>
+    </string-array>
+
+    <!-- 拍照次数 -->
+    <string-array name="picturenum_entries" translatable="false">
+        <item>10</item>
+        <item>50</item>
+        <item>100</item>
+        <item>180</item>
+        <item>360</item>
+    </string-array>
+    <string-array name="picturenum_entries_value" translatable="false">
+        <item>10</item>
+        <item>50</item>
+        <item>100</item>
+        <item>180</item>
+        <item>360</item>
+    </string-array>
+
+</resources>

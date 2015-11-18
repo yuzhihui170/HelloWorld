@@ -13,19 +13,24 @@
         android:layout_marginTop="10dp"
         android:lines="2"
         android:text="提示:如果录像图标没有正常在界面上显示，请重启开启本程序！"
-        android:textColor="@android:color/holo_red_dark" />
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btn_setting"
+        style="@style/ButtonStyle"
+        android:layout_below="@+id/textView_notice"
+        android:text="设置" />
 
     <Button
         android:id="@+id/btn_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView_notice"
+        style="@style/ButtonStyle"
+        android:layout_below="@+id/btn_setting"
         android:text="后台录像" />
 
     <Button
         android:id="@+id/btn_topService"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/ButtonStyle"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="10dp"
         android:text="停止录像" />

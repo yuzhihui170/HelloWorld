@@ -1,6 +1,7 @@
 package com.yzh.Utils;
 
 import java.io.File;
+import java.util.Arrays;
 
 import com.forrest.carrecorder.Constant;
 
@@ -50,6 +51,15 @@ public class MemoryUtil {
 		long availableBlocks = stat.getAvailableBlocksLong();
 		return Formatter.formatFileSize(mContext, blockSize * availableBlocks);
 	}
+	
+	/** 获得sd卡剩余容量，即可用大小 */
+	public long getSDAvailableSizeLong() {
+		File path = Environment.getExternalStorageDirectory();
+		StatFs stat = new StatFs(path.getPath());
+		long blockSize = stat.getBlockSizeLong();
+		long availableBlocks = stat.getAvailableBlocksLong();
+		return blockSize * availableBlocks;
+	}
 
 	/** 获得机身内存总大小 */
 	public String getRomTotalSize() {
@@ -71,19 +81,12 @@ public class MemoryUtil {
 	}
 	
 	/** 获得机身可用内存  */
-	public Long getRomAvailableSizeLong() {
+	public long getRomAvailableSizeLong() {
 		File path = Environment.getDataDirectory();
 		StatFs stat = new StatFs(path.getPath());
 		long blockSize = stat.getBlockSizeLong();
 		long availableBlocks = stat.getAvailableBlocksLong();
 		return blockSize * availableBlocks;
 	}
-	
-	/**空间不足时删除文件*/
-//	public void fileDelete() {
-//		if(getRomAvailableSizeLong()< Constant.FREE_SPACE) {
-//			Constant.SAVE_DIRECTORY
-//		}
-//	}
 
 }
