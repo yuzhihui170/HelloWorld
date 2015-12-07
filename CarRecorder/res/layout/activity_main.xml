@@ -23,9 +23,15 @@
         android:text="设置" />
 
     <Button
-        android:id="@+id/btn_back"
+        android:id="@+id/btn_startService"
         style="@style/ButtonStyle"
         android:layout_below="@+id/btn_setting"
+        android:text="开启录像" />
+
+    <Button
+        android:id="@+id/btn_back"
+        style="@style/ButtonStyle"
+        android:layout_below="@+id/btn_startService"
         android:text="后台录像" />
 
     <Button

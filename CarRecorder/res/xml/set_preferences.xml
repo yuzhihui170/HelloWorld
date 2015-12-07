@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <ListPreference
-        android:defaultValue="0"
-        android:dialogTitle="曝光值"
+        android:defaultValue="640x480"
+        android:dialogTitle="录像分辨率"
         android:entries="@array/exposure_entries"
         android:entryValues="@array/exposure_entries_value"
         android:key="exposure"
-        android:summary="设置拍照曝光值: 0"
-        android:title="曝光值" >
+        android:summary="设置录像分辨率: 640x480"
+        android:title="录像分辨率" >
     </ListPreference>
     <ListPreference
-        android:defaultValue="200"
-        android:dialogTitle="感光度"
+        android:defaultValue="10"
+        android:dialogTitle="单个视频时长"
         android:entries="@array/iso_entries"
         android:entryValues="@array/iso_entries_value"
         android:key="iso"
-        android:summary="设置感光度值: 200"
-        android:title="感光度" >
+        android:summary="设置单个视频时长: 10"
+        android:title="单个视频时长" >
     </ListPreference>
     <ListPreference
         android:defaultValue="incandescent"

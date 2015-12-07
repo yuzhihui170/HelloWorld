@@ -22,6 +22,7 @@ import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -40,6 +41,8 @@ import android.widget.Toast;
 
 public class RecorderService extends Service implements SurfaceHolder.Callback {
 	public static final String TAG = "yzh";
+	private static final int H_TIME_VISIBLE = 1;
+	private static final int H_TIME_INVISIBLE = 2;
 	public static final String ACTION_NAME = "com.forrest.carrecorder.RecorderService";
 	private CarRecorderApplication mCarRecorderApplication;
 	private WindowManager mWindowManager;
@@ -95,7 +98,7 @@ public class RecorderService extends Service implements SurfaceHolder.Callback {
 		mWindowManager.addView(mLinearLayout, mSurfaceLayoutParams); // 在悬浮窗中显示预览
 
 		mImageView = new MoveImageView(this);
-		mImageView.setImageResource(R.drawable.record);
+		mImageView.setImageResource(R.drawable.car_recorder);
 		mLayoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
 		mLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 		mLayoutParams.gravity = Gravity.LEFT | Gravity.TOP;
@@ -127,6 +130,7 @@ public class RecorderService extends Service implements SurfaceHolder.Callback {
 		mWindowManager.removeView(mLinearLayout);
 		mWindowManager.removeView(mImageView);
 		unregisterReceiver(mBroadcastReceiver);
+		YLog.d("unregisterReceiver ");
 		Log.d(TAG, "[RecorderService]  ------- onDestroy ------- ");
 	}
 
@@ -247,17 +251,18 @@ public class RecorderService extends Service implements SurfaceHolder.Callback {
 		mMediaRecorder.setOutputFile(mSaveFileName);
 		Log.d(TAG, "mSaveFileName =" + mSaveFileName);
 		
-//		mHandler.post(mRunnableFileDelete);
+		mHandler.post(mRunnableFileDelete);
 		try {
 			// 准备录制
 			mMediaRecorder.prepare();
 			// 开始录制
 			mMediaRecorder.start();
+			time = 0;
+			mHandler.sendEmptyMessage(H_TIME_VISIBLE);
 			if(!mRunnableFlag) {
 				mHandler.post(mRunnable);
 				mRunnableFlag = true;
 			}
-			time = 0;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -270,7 +275,6 @@ public class RecorderService extends Service implements SurfaceHolder.Callback {
 			mMediaRecorder.stop();
 			mMediaRecorder.release();
 			mMediaRecorder = null;
-			time = 0;
 		}
 	}
 
@@ -288,11 +292,10 @@ public class RecorderService extends Service implements SurfaceHolder.Callback {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-
 			if (action.equals(ACTION_NAME)) {
 				display = intent.getBooleanExtra("display", true);
 				changeWindow(display);
-				YLog.d("receiver BroadcastReceiver");
+				YLog.d("BroadcastReceiver ACTION_NAME = " + ACTION_NAME);
 			}
 		}
 	};
@@ -302,16 +305,37 @@ public class RecorderService extends Service implements SurfaceHolder.Callback {
 		myIntentFilter.addAction(ACTION_NAME);
 		// 注册广播
 		registerReceiver(mBroadcastReceiver, myIntentFilter);
+		YLog.d("registerReceiver ");
 	}
 
-	private Handler mHandler = new Handler();
+	private Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case H_TIME_VISIBLE:
+				mTextViewTime.setVisibility(View.VISIBLE);   //显示计时窗口
+				break;
+			case H_TIME_INVISIBLE:
+				mTextViewTime.setVisibility(View.INVISIBLE); //隐藏计时窗口
+				break;
+			default:
+				break;
+			}
+		}
+	};
+	
 	private int time = 0;
 	private boolean mRunnableFlag = false; //判断该Runnable是否已经开启,开启就不在开启了,否则会开启多个Runnable
 	private Runnable mRunnable = new Runnable() {
 		@Override
 		public void run() {
 			mTextViewTime.setText(DataUtil.formatTime(time, false));
-			time = time + 1000;
+			if(time <= Constant.TIME_SPAN * 60 * 1000) {
+				time = time + 1000;
+			}else {
+				mTextViewTime.setVisibility(View.INVISIBLE);
+				time = 0;
+			}
 			mHandler.postDelayed(mRunnable, 1000);
 		}
 	};
@@ -321,7 +345,9 @@ public class RecorderService extends Service implements SurfaceHolder.Callback {
 		@Override
 		public void run() {
 			MemoryUtil memoryUtil = new MemoryUtil(RecorderService.this);
+			YLog.d("sd = " + memoryUtil.getSDAvailableSizeLong() );
 			if(memoryUtil.getSDAvailableSizeLong() < Constant.FREE_SPACE) {
+				YLog.d("sd = " + memoryUtil.getSDAvailableSize());
 				FileUtils.deleteFile(Constant.SAVE_DIRECTORY, 10);
 				Toast.makeText(RecorderService.this,"存储空间不足1G,将自动删除 " + Constant.DELETE_FILE_NUM + " 个旧文件", Toast.LENGTH_LONG).show();
 			}

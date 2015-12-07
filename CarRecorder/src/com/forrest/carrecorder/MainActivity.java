@@ -97,7 +97,6 @@ public class MainActivity extends Activity {
 				finish();
 			}
 		});
-		
 		mBtn_stopService.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -107,47 +106,30 @@ public class MainActivity extends Activity {
 		mBtnSetting.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				createSettingDialog();
+				//createSettingDialog();
+				startActivity(new Intent(MainActivity.this,SettingActivity.class));
 			}
 		});
 	}
 	
 	private void createSettingDialog() {
-//		if(mDialogView == null) {
-//			mDialogView = LayoutInflater.from(this).inflate(R.layout.setting_dialog, null);
-//		}
-//		if(mDialog == null) {
-//			mDialog = new Dialog(this);
-//			mDialog.setContentView(mDialogView);
-//			Window windown = mDialog.getWindow();
-//			WindowManager.LayoutParams lp = windown.getAttributes();
-//			windown.setGravity(Gravity.LEFT | Gravity.TOP);
-//			lp.x = 300;
-//			lp.y = 100;
-//			lp.width = 800;
-//			lp.height = 800;
-//			lp.alpha = 0.7f;  
-//			windown.setAttributes(lp);
-//		}
-//		mDialog.show();
-		CustomerDialog.Builder builder = new CustomerDialog.Builder(this);
-		builder.setMessage("这个就是自定义的提示框");
-		builder.setTitle("提示");
-		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
-				//设置你的操作事项
-			}
-		});
-
-		builder.setNegativeButton("取消",
-				new android.content.DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
-
-		builder.create().show();
+		if(mDialogView == null) {
+			mDialogView = LayoutInflater.from(this).inflate(R.layout.setting_dialog, null);
+		}
+		if(mDialog == null) {
+			mDialog = new Dialog(this);
+			mDialog.setContentView(mDialogView);
+			Window windown = mDialog.getWindow();
+			WindowManager.LayoutParams lp = windown.getAttributes();
+			windown.setGravity(Gravity.LEFT | Gravity.TOP);
+			lp.x = 300;
+			lp.y = 100;
+			lp.width = 800;
+			lp.height = 800;
+			lp.alpha = 0.7f;  
+			windown.setAttributes(lp);
+		}
+		mDialog.show();
 	}
 	
 	/** 创建保存图片的目录,保存后面创建文件正确 */

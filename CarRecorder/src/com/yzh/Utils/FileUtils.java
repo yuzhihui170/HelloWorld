@@ -68,7 +68,6 @@ public class FileUtils {
 			File file = new File(dirPath + File.separator + filePaths[i]);
 			file.delete();
 		}
-//		Log.d(TAG, "================================================");
 //		filePaths = new File(dirPath).list();
 //		Arrays.sort(filePaths);
 //		for(String string : filePaths) {

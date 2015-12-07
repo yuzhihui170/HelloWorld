@@ -3,6 +3,7 @@ package com.yzh.ui;
 import java.io.Serializable;
 
 import com.forrest.carrecorder.R;
+import com.yzh.Utils.YLog;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -64,6 +65,8 @@ public class SettingPreferenceFragment extends PreferenceFragment implements OnP
 		
 		mWhitebalanceKey = getResources().getStringArray(R.array.whitebalance_entries);
 		mWhitebalanceValues = getResources().getStringArray(R.array.whitebalance_entries_value);
+		
+		YLog.d("--[SettingPreferenceFragment]-- onCreate");
 	}
 	
 	@Override
